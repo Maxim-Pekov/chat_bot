@@ -4,8 +4,10 @@
 Этот проект бота чата тех. поддержки для ВК и Телеграмм. Который можно гибко 
 обучать с помошью [https://dialogflow.cloud.google.com](https://dialogflow.cloud.google.com)
 
-## Пример сообщения телеграмм бота.
+## Пример общения телеграмм бота.
 <img src="static/demo_tg_bot.gif" width="300">
+
+## Пример общения VK бота.
 <img src="static/demo_vk_bot.gif" width="300">
 
 
