@@ -1,24 +1,25 @@
 ![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=CHAT+BOT)
 
+
 Этот проект бота чата тех. поддержки для ВК и Телеграмм. Который можно гибко 
 обучать с помошью [https://dialogflow.cloud.google.com](https://dialogflow.cloud.google.com)
 
-Готовых ботов вы можете протестировать по ссылкам:
-*telegram - @chat_secretary_bot
-*vk_bot - [https://vk.com/im?peers=c25&sel=-219276102](https://vk.com/im?peers=c25&sel=-219276102)
+## Пример сообщения телеграмм бота.
+<img src="static/demo_tg_bot.gif" width="300">
+<img src="static/demo_vk_bot.gif" width="300">
 
-Проект содержит три скрипта:
+
+## Готовых ботов вы можете протестировать по ссылкам:
+* telegram - @chat_secretary_bot
+* vk_bot - [https://vk.com/im?peers=c25&sel=-219276102](https://vk.com/im?peers=c25&sel=-219276102)
+
+## Проект содержит три скрипта:
 * `vk_chat.py` - Скрипт проверяет полученные сообщения в чате группы ВК и 
   отвечает на них с помошью dialogflow.
 * `telegram_chat.py` - Скрипт при получении сообщения в ТГ отвечает на них 
   генерируя ответ с помошью dialogflow.
 * `intent.py` - Скрипт обучает бота с помошью переданного в него json с 
   набором вопросов и ответами на них.
-
-## Пример сообщения телеграмм бота.
-
-<img src="static/111.jpg" width="300">
-
 
 ## Установка
 
