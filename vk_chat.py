@@ -7,8 +7,6 @@ from intent import detect_intent_texts
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 
-
-
 def auto_response(event, vk_api):
     """Отправляет текст принятого сообщения на обработку в dialogflow, а
     сгенерированный ответ посылает обратно пользователю."""
@@ -18,11 +16,12 @@ def auto_response(event, vk_api):
     response_text = detect_intent_texts(
         project_id, session_id, texts, language_code='ru'
     )
-    vk_api.messages.send(
-        user_id=event.user_id,
-        message=response_text,
-        random_id=random.random()
-    )
+    if not response_text.intent.is_fallback:
+        vk_api.messages.send(
+            user_id=event.user_id,
+            message=response_text.fulfillment_text,
+            random_id=random.random()
+        )
 
 
 if __name__ == "__main__":

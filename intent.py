@@ -24,7 +24,6 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         response = session_client.detect_intent(
             request={"session": session, "query_input": query_input}
         )
-
         print("=" * 20)
         print("Query text: {}".format(response.query_result.query_text))
         print(
@@ -33,9 +32,8 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
                 response.query_result.intent_detection_confidence,
             )
         )
-        response_text = response.query_result.fulfillment_text
-        print("Fulfillment text: {}\n".format(response.query_result.fulfillment_text))
-        return response_text
+        print(f"Fulfillment text: {response.query_result.fulfillment_text}\n")
+        return response.query_result
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
@@ -45,8 +43,9 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     parent = dialogflow.AgentsClient.agent_path(project_id)
     training_phrases = []
     for training_phrases_part in training_phrases_parts:
-        part = dialogflow.Intent.TrainingPhrase.Part(text=training_phrases_part)
-        # Here we create a new training phrase for each provided part.
+        part = dialogflow.Intent.TrainingPhrase.Part(
+            text=training_phrases_part
+        )
         training_phrase = dialogflow.Intent.TrainingPhrase(parts=[part])
         training_phrases.append(training_phrase)
 
