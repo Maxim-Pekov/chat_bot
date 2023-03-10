@@ -56,11 +56,13 @@ pip install -r devman_bot/requirements.txt
 6. Создайте файл с названием `.env`
 
 7. Запишите в данном файле, ваш API токен с сайта ВК, телеграмм токен 
-   вашего бота и PROJECT_ID полученный на сайте dialogflow.
+   вашего бота, PROJECT_ID полученный на сайте dialogflow, 
+   GOOGLE_APPLICATION_CREDENTIALS - это путь к токену
 ```python
 VK_API_KEY='vk1.a.bNnlnbblk47y5l4........'
 PROJECT_ID='red-flowers-566321'
 TG_CHAT_ID='7418955261'
+GOOGLE_APPLICATION_CREDENTIALS='/root/.config/gcloud/application_default_credentials.json'
 ```
 
 ## About me
