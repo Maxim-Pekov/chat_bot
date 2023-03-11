@@ -39,7 +39,7 @@ def auto_response(update: Update, context: CallbackContext) -> None:
     text = update.message.text
     texts.append(text)
     project_id = os.getenv('PROJECT_ID')
-    logger.error(f"Текст который прислал пользователь {text} отправляем его на "
+    logger.debug(f"Текст который прислал пользователь {text} отправляем его на "
                 f"обработку в dialogflow")
     intent_response = detect_intent_texts(
         project_id, chat_id, texts, language_code='ru'

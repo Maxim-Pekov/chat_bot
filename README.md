@@ -57,12 +57,15 @@ pip install -r devman_bot/requirements.txt
 
 7. Запишите в данном файле, ваш API токен с сайта ВК, телеграмм токен 
    вашего бота, PROJECT_ID полученный на сайте dialogflow, 
-   GOOGLE_APPLICATION_CREDENTIALS - это путь к токену
+   GOOGLE_APPLICATION_CREDENTIALS - это путь к токену dialogflow,
+   TG_CHAT_ID - это id чата телеграмма куда присылать ошибки уровня Error.
+   
 ```python
 VK_API_KEY='vk1.a.bNnlnbblk47y5l4........'
 PROJECT_ID='red-flowers-566321'
 TG_CHAT_ID='7418955261'
 GOOGLE_APPLICATION_CREDENTIALS='/root/.config/gcloud/application_default_credentials.json'
+TG_CHAT_ID=741789456
 ```
 
 ## About me
