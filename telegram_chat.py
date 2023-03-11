@@ -1,24 +1,25 @@
 import os
-import logging
+import logging.config
 
+from time import sleep
 from dotenv import load_dotenv
 from intent import detect_intent_texts
+from settings import logger_config
 
 from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.ext import CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
-
-logger = logging.getLogger(__name__)
+logging.config.dictConfig(logger_config)
+logger = logging.getLogger('app_logger')
+logger.debug('Бот telegram_chat запущен.')
 
 
 def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
+    logger.debug("Пользователь выполнил команду /start")
+
     user = update.effective_user
     update.message.reply_markdown_v2(
         fr'Здравствуйте {user.mention_markdown_v2()}\!',
@@ -38,6 +39,8 @@ def auto_response(update: Update, context: CallbackContext) -> None:
     text = update.message.text
     texts.append(text)
     project_id = os.getenv('PROJECT_ID')
+    logger.error(f"Текст который прислал пользователь {text} отправляем его на "
+                f"обработку в dialogflow")
     intent_response = detect_intent_texts(
         project_id, chat_id, texts, language_code='ru'
     )
@@ -47,19 +50,26 @@ def auto_response(update: Update, context: CallbackContext) -> None:
 def main() -> None:
     """Start the bot."""
     load_dotenv()
-    API_TG_TOKEN = os.getenv('API_TG_TOKEN')
-    updater = Updater(API_TG_TOKEN)
+    TIMEOUT = 120
+    api_tg_token = os.getenv('API_TG_TOKEN')
 
-    dispatcher = updater.dispatcher
+    while True:
+        try:
+            updater = Updater(api_tg_token)
 
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("help", help_command))
-    dispatcher.add_handler(
-        MessageHandler(Filters.text & ~Filters.command, auto_response)
-    )
+            dispatcher = updater.dispatcher
 
-    updater.start_polling()
-    updater.idle()
+            dispatcher.add_handler(CommandHandler("start", start))
+            dispatcher.add_handler(CommandHandler("help", help_command))
+            dispatcher.add_handler(
+                MessageHandler(Filters.text & ~Filters.command, auto_response)
+            )
+
+            updater.start_polling()
+            updater.idle()
+        except Exception:
+            logger.exception("Бот упал с ошибкой")
+            sleep(TIMEOUT)
 
 
 if __name__ == '__main__':
