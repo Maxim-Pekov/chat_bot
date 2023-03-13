@@ -1,15 +1,12 @@
 import os
 import requests
-import logging.config
+import logging
 
 from dotenv import load_dotenv
-from settings import logger_config
 from google.cloud import dialogflow
 
 
-logging.config.dictConfig(logger_config)
-logger = logging.getLogger('app_logger')
-logger.debug('Пользователь попал в модель intent.')
+logger = logging.getLogger(__name__)
 
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
@@ -20,7 +17,7 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     session_client = dialogflow.SessionsClient()
 
     session = session_client.session_path(project_id, session_id)
-    logger.debug("Session path: {}\n".format(session))
+    logger.info("Session path: {}\n".format(session))
 
     for text in texts:
         text_input = dialogflow.TextInput(text=text,
@@ -31,15 +28,15 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         response = session_client.detect_intent(
             request={"session": session, "query_input": query_input}
         )
-        logger.debug("=" * 20)
-        logger.debug("Query text: {}".format(response.query_result.query_text))
-        logger.debug(
+        logger.info("=" * 20)
+        logger.info("Query text: {}".format(response.query_result.query_text))
+        logger.info(
             "Detected intent: {} (confidence: {})\n".format(
                 response.query_result.intent.display_name,
                 response.query_result.intent_detection_confidence,
             )
         )
-        logger.debug(
+        logger.info(
             f"Fulfillment text: {response.query_result.fulfillment_text}\n"
         )
         return response.query_result
@@ -71,7 +68,7 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
         request={"parent": parent, "intent": intent}
     )
 
-    logger.debug("Intent created: {}".format(response))
+    logger.info("Intent created: {}".format(response))
 
 
 def main() -> None:

@@ -1,18 +1,17 @@
-import logging.config
 import os
 import random
+import logging
 
 import vk_api as vk
 from time import sleep
+from telegram_chat import TelegramLogsHandler
 from dotenv import load_dotenv
-from settings import logger_config
 from intent import detect_intent_texts
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 
-logging.config.dictConfig(logger_config)
-logger = logging.getLogger('app_logger')
-logger.debug('Бот vk_chat запущен.')
+logger = logging.getLogger(__name__)
+exception_logger = logging.getLogger('exception_logger')
 
 
 def auto_response(event, vk_api):
@@ -22,7 +21,7 @@ def auto_response(event, vk_api):
     session_id = event.user_id
     project_id = os.getenv('PROJECT_ID')
 
-    logger.debug(f"Текст который прислал пользователь texts='{texts}'"
+    logger.info(f"Текст который прислал пользователь texts='{texts}'"
                  f" отправляем его на обработку в dialogflow")
     response_text = detect_intent_texts(
         project_id, session_id, texts, language_code='ru'
@@ -39,6 +38,15 @@ if __name__ == "__main__":
     load_dotenv()
     TIMEOUT = 120
     vk_session = vk.VkApi(token=os.getenv('VK_API_KEY'))
+    chat_id = os.getenv('TG_CHAT_ID')
+    api_tg_token = os.getenv('API_TG_TOKEN')
+
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - '
+                               '%(message)s', datefmt='%d-%m-%Y %I:%M:%S %p',
+                        level=logging.INFO)
+
+    exception_logger.setLevel(logging.ERROR)
+    exception_logger.addHandler(TelegramLogsHandler(api_tg_token, chat_id))
 
     while True:
         try:
@@ -50,5 +58,5 @@ if __name__ == "__main__":
                     logger.info('Пришло сообщение в ВК от: ', event.user_id)
                     auto_response(event, vk_api)
         except Exception:
-            logger.exception("Бот упал с ошибкой")
+            exception_logger.exception("Бот упал с ошибкой")
             sleep(TIMEOUT)
