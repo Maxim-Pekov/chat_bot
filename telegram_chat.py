@@ -37,8 +37,7 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def auto_response(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
+def get_auto_reply(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.from_user.id
     text = update.message.text
     project_id = os.getenv('PROJECT_ID')
@@ -51,7 +50,6 @@ def auto_response(update: Update, context: CallbackContext) -> None:
 
 
 def main() -> None:
-    """Start the bot."""
     load_dotenv()
     TIMEOUT = 120
     chat_id = os.getenv('TG_CHAT_ID')
@@ -72,7 +70,7 @@ def main() -> None:
 
             dispatcher.add_handler(CommandHandler("start", start))
             dispatcher.add_handler(
-                MessageHandler(Filters.text & ~Filters.command, auto_response)
+                MessageHandler(Filters.text & ~Filters.command, get_auto_reply)
             )
 
             updater.start_polling()

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 exception_logger = logging.getLogger('exception_logger')
 
 
-def auto_response(event, vk_api):
+def get_auto_reply(event, vk_api):
     """Отправляет текст принятого сообщения на обработку в dialogflow, а
     сгенерированный ответ посылает обратно пользователю."""
     text = event.text
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                     logger.info('Пришло сообщение в ВК от: ', event.user_id)
-                    auto_response(event, vk_api)
+                    get_auto_reply(event, vk_api)
         except Exception:
             exception_logger.exception("Бот упал с ошибкой")
             sleep(TIMEOUT)
