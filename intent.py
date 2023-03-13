@@ -19,27 +19,26 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
     session = session_client.session_path(project_id, session_id)
     logger.info("Session path: {}\n".format(session))
 
-    for text in texts:
-        text_input = dialogflow.TextInput(text=text,
-                                          language_code=language_code)
+    text_input = dialogflow.TextInput(text=texts,
+                                      language_code=language_code)
 
-        query_input = dialogflow.QueryInput(text=text_input)
+    query_input = dialogflow.QueryInput(text=text_input)
 
-        response = session_client.detect_intent(
-            request={"session": session, "query_input": query_input}
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+    logger.info("=" * 20)
+    logger.info("Query text: {}".format(response.query_result.query_text))
+    logger.info(
+        "Detected intent: {} (confidence: {})\n".format(
+            response.query_result.intent.display_name,
+            response.query_result.intent_detection_confidence,
         )
-        logger.info("=" * 20)
-        logger.info("Query text: {}".format(response.query_result.query_text))
-        logger.info(
-            "Detected intent: {} (confidence: {})\n".format(
-                response.query_result.intent.display_name,
-                response.query_result.intent_detection_confidence,
-            )
-        )
-        logger.info(
-            f"Fulfillment text: {response.query_result.fulfillment_text}\n"
-        )
-        return response.query_result
+    )
+    logger.info(
+        f"Fulfillment text: {response.query_result.fulfillment_text}\n"
+    )
+    return response.query_result
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):

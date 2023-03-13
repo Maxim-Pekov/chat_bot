@@ -17,14 +17,14 @@ exception_logger = logging.getLogger('exception_logger')
 def auto_response(event, vk_api):
     """Отправляет текст принятого сообщения на обработку в dialogflow, а
     сгенерированный ответ посылает обратно пользователю."""
-    texts = [event.text]
+    text = event.text
     session_id = event.user_id
     project_id = os.getenv('PROJECT_ID')
 
     logger.info(f"Текст который прислал пользователь texts='{texts}'"
                  f" отправляем его на обработку в dialogflow")
     response_text = detect_intent_texts(
-        project_id, session_id, texts, language_code='ru'
+        project_id, session_id, text, language_code='ru'
     )
     if not response_text.intent.is_fallback:
         vk_api.messages.send(

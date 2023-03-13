@@ -37,22 +37,15 @@ def start(update: Update, context: CallbackContext) -> None:
     )
 
 
-def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
-
 def auto_response(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
-    texts = []
     chat_id = update.message.from_user.id
     text = update.message.text
-    texts.append(text)
     project_id = os.getenv('PROJECT_ID')
     logger.info(f"Текст который прислал пользователь {text} отправляем его на "
                 f"обработку в dialogflow")
     intent_response = detect_intent_texts(
-        project_id, chat_id, texts, language_code='ru'
+        project_id, chat_id, text, language_code='ru'
     )
     update.message.reply_text(intent_response.fulfillment_text)
 
@@ -78,7 +71,6 @@ def main() -> None:
             dispatcher = updater.dispatcher
 
             dispatcher.add_handler(CommandHandler("start", start))
-            dispatcher.add_handler(CommandHandler("help", help_command))
             dispatcher.add_handler(
                 MessageHandler(Filters.text & ~Filters.command, auto_response)
             )
