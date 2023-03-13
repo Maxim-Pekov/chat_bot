@@ -21,7 +21,7 @@ def get_auto_reply(event, vk_api):
     session_id = event.user_id
     project_id = os.getenv('PROJECT_ID')
 
-    logger.info(f"Текст который прислал пользователь texts='{texts}'"
+    logger.info(f"Текст который прислал пользователь texts='{text}'"
                  f" отправляем его на обработку в dialogflow")
     response_text = detect_intent_texts(
         project_id, session_id, text, language_code='ru'
@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
             for event in longpoll.listen():
                 if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                    logger.info('Пришло сообщение в ВК от: ', event.user_id)
+                    logger.info(f'Пришло сообщение в ВК от: {event.user_id}')
                     get_auto_reply(event, vk_api)
         except Exception:
             exception_logger.exception("Бот упал с ошибкой")
