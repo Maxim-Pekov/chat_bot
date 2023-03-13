@@ -76,8 +76,9 @@ def main() -> None:
     load_dotenv()
 
     project_id = os.getenv('PROJECT_ID')
-    url = 'https://dvmn.org/media/filer_public/a7/db/' \
-          'a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json'
+    url = os.getenv('INTENT_QUESTIONS',
+                    'https://dvmn.org/media/filer_public/a7/db/' \
+                    'a7db66c0-1259-4dac-9726-2d1fa9c44f20/questions.json')
 
     response = requests.get(url)
     response.raise_for_status()
