@@ -4,9 +4,9 @@ import logging
 
 import vk_api as vk
 from time import sleep
-from telegram_chat import TelegramLogsHandler
 from dotenv import load_dotenv
 from intent import detect_intent_texts
+from logs_handler import TelegramLogsHandler
 from vk_api.longpoll import VkLongPoll, VkEventType
 
 
